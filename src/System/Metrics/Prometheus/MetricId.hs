@@ -14,7 +14,7 @@ import           Data.Text      (Text)
 import qualified Data.Text as Text
 import           Prelude        hiding (null)
 
-
+-- | Construct with 'makeName' to ensure that names use only valid characters
 newtype Name = Name { unName :: Text } deriving (Show, Eq, Ord, Monoid, Semigroup)
 
 instance IsString Name where
@@ -50,11 +50,17 @@ allowedChar :: Char -> Bool
 allowedChar c = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || isDigit c || c == '_'
 
 
+-- | Make the input match the regex @[a-zA-Z_][a-zA-Z0-9_]@ which
+-- defines valid metric and label names, according to
+-- <https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels>
+-- Replace invalid characters with @_@ and add a leading @_@ if the
+-- first character is only valid as a later character.
 makeValid :: Text -> Text
 makeValid "" = "_"
 makeValid txt = prefix_ <> Text.map (\c -> if allowedChar c then c else '_' ) txt
   where prefix_ = if isDigit (Text.head txt) then "_" else ""
 
 
+-- | Construct a 'Name', replacing disallowed characters.
 makeName :: Text -> Name
 makeName = Name . makeValid
