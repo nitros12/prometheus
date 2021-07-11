@@ -46,10 +46,6 @@ null :: Labels -> Bool
 null = Map.null . unLabels
 
 
-allowedChar :: Char -> Bool
-allowedChar c = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || isDigit c || c == '_'
-
-
 -- | Make the input match the regex @[a-zA-Z_][a-zA-Z0-9_]@ which
 -- defines valid metric and label names, according to
 -- <https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels>
@@ -58,7 +54,10 @@ allowedChar c = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || isDigit c ||
 makeValid :: Text -> Text
 makeValid "" = "_"
 makeValid txt = prefix_ <> Text.map (\c -> if allowedChar c then c else '_' ) txt
-  where prefix_ = if isDigit (Text.head txt) then "_" else ""
+  where
+    prefix_ = if isDigit (Text.head txt) then "_" else ""
+    allowedChar :: Char -> Bool
+    allowedChar c = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || isDigit c || c == '_'
 
 
 -- | Construct a 'Name', replacing disallowed characters.
