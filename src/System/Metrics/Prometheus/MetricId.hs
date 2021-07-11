@@ -51,8 +51,8 @@ allowedChar c = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || isDigit c ||
 
 
 makeValid :: Text -> Text
+makeValid "" = "_"
 makeValid txt = prefix_ <> Text.map (\c -> if allowedChar c then c else '_' ) txt
-  -- digit is not valid as first character, so make it the second character
   where prefix_ = if isDigit (Text.head txt) then "_" else ""
 
 
