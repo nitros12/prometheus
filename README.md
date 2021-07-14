@@ -69,4 +69,4 @@ The scraping operation of the server to collect all the metrics locks the regist
 - [ ] Encode name and labels on register.
 - [x] Implement ReaderT for Concurrent Registry.
 - [x] Library documentation and example.
-- [ ] [Name and label validation](http://prometheus.io/docs/concepts/data_model/#metric-names-and-labels)
+- [x] [Name and label validation](http://prometheus.io/docs/concepts/data_model/#metric-names-and-labels)
